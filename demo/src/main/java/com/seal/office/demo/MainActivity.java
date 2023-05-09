@@ -1,12 +1,13 @@
 package com.seal.office.demo;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSONObject;
-import com.seal.office.api.SealOfficeEngineApi;
+import com.seal.office.aar.api.SealOfficeEngineApi;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +19,10 @@ public class MainActivity extends AppCompatActivity {
 
         // 插件初始化
         SealOfficeEngineApi.initEngine(MainActivity.this);
+
+        // 获取版本号
+        String versionCode = SealOfficeEngineApi.getVersion(MainActivity.this);
+        Log.d("SealOffice版本号：", versionCode);
 
         // 参数传递
         JSONObject params = new JSONObject();
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.open_jpg_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                JSONObject params = new JSONObject();
                 params.put("imageUrls", new String[]{"http://silianpan.cn/upload/2022/01/01/1.jpg", "http://silianpan.cn/upload/2022/01/01/1.png"});
                 params.put("isSaveImg", true);
                 SealOfficeEngineApi.openFileImage(MainActivity.this, params);
@@ -73,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.open_mp3_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                JSONObject params = new JSONObject();
                 params.put("videoUrl", "http://silianpan.cn/upload/2022/01/01/1.mp3");
                 SealOfficeEngineApi.openFileVideo(MainActivity.this, params);
             }
@@ -82,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.open_mp4_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                JSONObject params = new JSONObject();
                 params.put("videoUrl", "http://silianpan.cn/upload/2022/01/01/1.mp4");
                 SealOfficeEngineApi.openFileVideo(MainActivity.this, params);
             }
