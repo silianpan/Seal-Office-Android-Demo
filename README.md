@@ -63,7 +63,7 @@ SealOfficeEngineApi.initEngine(MainActivity.this);
 
 #### 5、接口调用
 
-##### （1）打开Office文档（docx、pptx、xlsx、pdf等）
+##### （1）打开Office文档（docx、pptx、xlsx、csv、pdf、txt等）
 
 ```java
 JSONObject params = new JSONObject();
@@ -72,7 +72,34 @@ params.put("url", "http://silianpan.cn/upload/2022/01/01/1.docx");
 SealOfficeEngineApi.openFile(MainActivity.this, params);
 ```
 
-##### （2）打开图片（jpg、png、jpeg、bmp等）
+##### （2）打开Office文档（嵌入方式，自定义界面）
+
+```java
+/**
+* 打开Office文档（嵌入方式，自定义界面）
+* @param activity Activity对象
+* @param frameLayout FrameLayout对象
+* @param filePath 文档本地绝对路径
+*/
+SealOfficeEngineApi.openFile(activity, frameLayout, filePath);
+```
+
+##### （3）添加水印
+
+```java
+/**
+* 添加水印
+* @param context 上下文对象
+* @param frameLayout FrameLayout对象
+* @param waterMarkText 水印文本，以“\n”作为分隔符换行
+* @param waterMarkDegree 水印旋转角度，默认为-30（逆时针30度）
+* @param waterMarkFontSize 水印字体大小，单位为sp，默认为13
+* @param waterMarkFontColor 水印字体颜色，默认为浅灰色（#40F3F5F9）
+*/
+SealOfficeEngineApi.addWaterMark(context, frameLayout, waterMarkText, waterMarkDegree, waterMarkFontSize, waterMarkFontColor);
+```
+
+##### （4）打开图片（jpg、png、jpeg、bmp等）
 
 ```java
 JSONObject params = new JSONObject();
@@ -81,7 +108,7 @@ params.put("isSaveImg", true);
 SealOfficeEngineApi.openFileImage(MainActivity.this, params);
 ```
 
-##### （3）打开音视频（mp3、flac、wma、wav、mp4、mkv等）
+##### （5）打开音视频（mp3、flac、wma、wav、mp4、mkv等）
 
 ```java
 JSONObject params = new JSONObject();
@@ -89,7 +116,7 @@ params.put("videoUrl", "http://silianpan.cn/upload/2022/01/01/1.mp4");
 SealOfficeEngineApi.openFileVideo(MainActivity.this, params);
 ```
 
-##### （4）WPS预览或编辑
+##### （6）WPS预览或编辑
 
 ```java
 JSONObject params = new JSONObject();
@@ -97,7 +124,7 @@ params.put("url", "http://silianpan.cn/upload/2022/01/01/1.docx");
 SealOfficeEngineApi.openFileWPS(MainActivity.this, params);
 ```
 
-##### （5）检查WPS是否安装
+##### （7）检查WPS是否安装
 
 ```java
 boolean hasWps = SealOfficeEngineApi.checkWps(MainActivity.this);
