@@ -1,8 +1,10 @@
 package com.seal.office.demo;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,6 +29,18 @@ public class MainActivity extends AppCompatActivity {
         // 参数传递
         JSONObject params = new JSONObject();
         params.put("waterMarkText", "你好，世界\n准备好了吗？时刻准备着");
+
+        // 文件url
+        findViewById(R.id.open_file_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText fileUrlText = findViewById(R.id.file_url);
+                if (!TextUtils.isEmpty(fileUrlText.getText())) {
+                    params.put("url", fileUrlText.getText());
+                }
+                SealOfficeEngineApi.openFile(MainActivity.this, params);
+            }
+        });
 
         // docx
         findViewById(R.id.open_docx_button).setOnClickListener(new View.OnClickListener() {

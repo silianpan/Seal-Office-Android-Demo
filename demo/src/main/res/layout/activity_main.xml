@@ -23,7 +23,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/file_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="16"
+            android:hint="文件url"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/open_file_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="打开输入文件url" />
 
         <Button
             android:id="@+id/open_docx_button"
