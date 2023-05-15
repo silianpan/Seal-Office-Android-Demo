@@ -73,7 +73,9 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.open_pdf_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                params.put("url", "http://silianpan.cn/upload/2022/01/01/2.pdf");
+                params.put("url", "https://static.gongkaoleida.com/2021/file/download/2021湖南省公务员考试《报考指导手册》.pdf");
+//                params.put("fileName", "2021湖南省公务员考试《报考指导手册》");
+//                params.put("fileType", "pdf");
                 SealOfficeEngineApi.openFile(MainActivity.this, params);
             }
         });

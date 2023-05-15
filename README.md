@@ -38,6 +38,7 @@ UniApp项目集成方式，参考：[插件市场](https://ext.dcloud.net.cn/plu
 #### 3、添加依赖
 
 ```java
+// 不需要图片预览，删除libs/ImagePreview-release.aar包
 implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 
 // ================= SealOffice文档预览需要添加的依赖包 begin ==============
@@ -49,8 +50,12 @@ implementation 'com.facebook.fresco:fresco:1.13.0'
 implementation 'com.google.android.material:material:1.3.0'
 implementation "com.github.bumptech.glide:glide:4.9.0"
 implementation "androidx.constraintlayout:constraintlayout:2.1.3"
+
+// ============ 音视频播放，不需要直接去掉 begin ==========
 implementation 'xyz.doikki.android.dkplayer:dkplayer-java:3.3.7'
 implementation 'xyz.doikki.android.dkplayer:dkplayer-ui:3.3.7'
+// ============ 音视频播放，不需要直接去掉 end ============
+
 implementation 'net.lingala.zip4j:zip4j:2.11.5'
 // ================= SealOffice文档预览需要添加的依赖包 end ================
 ```
