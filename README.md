@@ -64,18 +64,31 @@ implementation 'net.lingala.zip4j:zip4j:2.11.5'
 #### 4、插件初始化（在应用启动时进行调用）
 
 ```java
-SealOfficeEngineApi.initEngine(MainActivity.this);
+SealOfficeEngineApi.initEngine(MainActivity.this, new ISealReaderCallback() {
+  @Override
+  public void callback(int code, String msg) {
+    Log.e("" + code, msg);
+  }
+});
 ```
 
 #### 5、接口调用
 
-##### （1）打开Office文档（docx、pptx、xlsx、csv、pdf、txt等）
+#### 注意：接口参数请参考：[五、openFile接口参数说明](https://github.com/silianpan/Seal-UniPlugin-Demo)
+
+##### （1）打开Office文档（支持wps、doc、docx、xls、xlsx、csv、ppt、pptx、txt、properties、log、Log、ini、lua、conf、m、cpp、java、h、xml、html、htm等常见文档格式）
 
 ```java
 JSONObject params = new JSONObject();
 params.put("waterMarkText", "你好，世界\n准备好了吗？时刻准备着");
 params.put("url", "http://silianpan.cn/upload/2022/01/01/1.docx");
-SealOfficeEngineApi.openFile(MainActivity.this, params);
+params.put("isDeleteFile", false);
+SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
+  @Override
+  public void callback(int code, String msg) {
+    Log.e("" + code, msg);
+  }
+});
 ```
 
 ##### （2）打开Office文档（嵌入方式，自定义界面）
@@ -87,7 +100,12 @@ SealOfficeEngineApi.openFile(MainActivity.this, params);
 * @param frameLayout FrameLayout对象
 * @param filePath 文档本地绝对路径
 */
-SealOfficeEngineApi.openFile(activity, frameLayout, filePath);
+SealOfficeEngineApi.openFile(activity, frameLayout, filePath, new ISealReaderCallback() {
+  @Override
+  public void callback(int code, String msg) {
+    Log.e("" + code, msg);
+  }
+});
 ```
 
 ##### （3）添加水印
@@ -127,7 +145,12 @@ SealOfficeEngineApi.openFileVideo(MainActivity.this, params);
 ```java
 JSONObject params = new JSONObject();
 params.put("url", "http://silianpan.cn/upload/2022/01/01/1.docx");
-SealOfficeEngineApi.openFileWPS(MainActivity.this, params);
+SealOfficeEngineApi.openFileWPS(MainActivity.this, params, new ISealReaderCallback() {
+  @Override
+  public void callback(int code, String msg) {
+    Log.e("" + code, msg);
+  }
+});
 ```
 
 ##### （7）检查WPS是否安装
@@ -135,3 +158,25 @@ SealOfficeEngineApi.openFileWPS(MainActivity.this, params);
 ```java
 boolean hasWps = SealOfficeEngineApi.checkWps(MainActivity.this);
 ```
+
+#### 四、回调结果状态码说明
+
+| 状态码 | 说明                           |
+| ------ | ------------------------------ |
+| 1      | 初始化引擎成功                 |
+| 2      | 文件预览成功                   |
+|        |                                |
+| -1     | 初始化引擎失败                 |
+| -2     | 初始化引擎失败                 |
+| -3     | 授权失败，请联系客服重新授权   |
+| -4     | 请联系客服授权包名             |
+| -5     | 授权已过期，请联系客服重新授权 |
+| -6     | 参数异常，加载文件失败         |
+| -7     | 不支持文件类型                 |
+| -8     | 文件不存在                     |
+| -9     | 文件预览失败                   |
+|        |                                |
+| 301    | 文档下载失败                   |
+| 1001   | 文档下载成功                   |
+| 1008   | 缓存文档删除成功               |
+| 1010   | 页面返回                       |

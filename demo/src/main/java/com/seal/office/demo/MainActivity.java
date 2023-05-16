@@ -9,6 +9,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSONObject;
+import com.seal.office.aar.api.ISealReaderCallback;
 import com.seal.office.aar.api.SealOfficeEngineApi;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,7 +21,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // 插件初始化
-        SealOfficeEngineApi.initEngine(MainActivity.this);
+        SealOfficeEngineApi.initEngine(MainActivity.this, new ISealReaderCallback() {
+            @Override
+            public void callback(int code, String msg) {
+                Log.e("" + code, msg);
+            }
+        });
 
         // 获取版本号
         String versionCode = SealOfficeEngineApi.getVersion(MainActivity.this);
@@ -38,7 +44,12 @@ public class MainActivity extends AppCompatActivity {
                 if (!TextUtils.isEmpty(fileUrlText.getText())) {
                     params.put("url", fileUrlText.getText());
                 }
-                SealOfficeEngineApi.openFile(MainActivity.this, params);
+                SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
+                    @Override
+                    public void callback(int code, String msg) {
+                        Log.e("" + code, msg);
+                    }
+                });
             }
         });
 
@@ -47,7 +58,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 params.put("url", "http://silianpan.cn/upload/2022/01/01/1.docx");
-                SealOfficeEngineApi.openFile(MainActivity.this, params);
+                SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
+                    @Override
+                    public void callback(int code, String msg) {
+                        Log.e("" + code, msg);
+                    }
+                });
             }
         });
 
@@ -56,7 +72,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 params.put("url", "http://silianpan.cn/upload/2022/01/01/1.xlsx");
-                SealOfficeEngineApi.openFile(MainActivity.this, params);
+                SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
+                    @Override
+                    public void callback(int code, String msg) {
+                        Log.e("" + code, msg);
+                    }
+                });
             }
         });
 
@@ -65,7 +86,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 params.put("url", "http://silianpan.cn/upload/2022/01/01/1.pptx");
-                SealOfficeEngineApi.openFile(MainActivity.this, params);
+                SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
+                    @Override
+                    public void callback(int code, String msg) {
+                        Log.e("" + code, msg);
+                    }
+                });
             }
         });
 
@@ -76,7 +102,12 @@ public class MainActivity extends AppCompatActivity {
                 params.put("url", "https://static.gongkaoleida.com/2021/file/download/2021湖南省公务员考试《报考指导手册》.pdf");
 //                params.put("fileName", "2021湖南省公务员考试《报考指导手册》");
 //                params.put("fileType", "pdf");
-                SealOfficeEngineApi.openFile(MainActivity.this, params);
+                SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
+                    @Override
+                    public void callback(int code, String msg) {
+                        Log.e("" + code, msg);
+                    }
+                });
             }
         });
 
