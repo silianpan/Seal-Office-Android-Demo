@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
                     public void callback(int code, String msg) {
-                        Log.e("" + code, msg);
+                        Log.e("打开文件URL：" + code, msg);
                     }
                 });
             }
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
                     public void callback(int code, String msg) {
-                        Log.e("" + code, msg);
+                        Log.e("打开docx：" + code, msg);
                     }
                 });
             }
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
                     public void callback(int code, String msg) {
-                        Log.e("" + code, msg);
+                        Log.e("打开xlsx：" + code, msg);
                     }
                 });
             }
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
                     public void callback(int code, String msg) {
-                        Log.e("" + code, msg);
+                        Log.e("打开pptx：" + code, msg);
                     }
                 });
             }
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
                     public void callback(int code, String msg) {
-                        Log.e("" + code, msg);
+                        Log.e("打开pdf：" + code, msg);
                     }
                 });
             }
@@ -139,6 +139,22 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject params = new JSONObject();
                 params.put("videoUrl", "http://silianpan.cn/upload/2022/01/01/1.mp4");
                 SealOfficeEngineApi.openFileVideo(MainActivity.this, params);
+            }
+        });
+
+        // WPS编辑
+        findViewById(R.id.open_wps_edit_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONObject params = new JSONObject();
+                params.put("url", "http://silianpan.cn/upload/2022/01/01/1.docx");
+                params.put("openMode", "EditMode");
+                SealOfficeEngineApi.openFileWPS(MainActivity.this, params, new ISealReaderCallback() {
+                    @Override
+                    public void callback(int code, String msg) {
+                        Log.e("WPS编辑：" + code, msg);
+                    }
+                });
             }
         });
     }
