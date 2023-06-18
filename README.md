@@ -93,6 +93,8 @@ SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback(
 
 ##### （2）打开Office文档（嵌入方式，自定义界面）
 
+* 接口一：传入字符串参数，文档本地绝对路径
+
 ```java
 /**
 * 打开Office文档（嵌入方式，自定义界面）
@@ -100,6 +102,7 @@ SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback(
 * @param frameLayout FrameLayout对象
 * @param filePath 文档本地绝对路径
 */
+FrameLayout customContainer = findViewById(R.id.custom_container);
 SealOfficeEngineApi.openFile(activity, frameLayout, filePath, new ISealReaderCallback() {
   @Override
   public void callback(int code, String msg) {
@@ -107,6 +110,32 @@ SealOfficeEngineApi.openFile(activity, frameLayout, filePath, new ISealReaderCal
   }
 });
 ```
+
+* 接口二：传入参数对象
+
+```java
+/**
+* 打开Office文档（嵌入方式，自定义界面）
+* @param activity Activity对象
+* @param frameLayout FrameLayout对象
+* @param params JSONObject对象
+*    （1）filePath String（必传） 文档本地绝对路径
+* 	 （2）readViewWidth Integer（可选） 阅读视图宽度，可以根据屏幕大小计算传入
+*    （3）readViewHeight Integer（可选） 阅读视图高度，可以根据屏幕大小计算传入，建议不传
+*/
+FrameLayout customContainer = findViewById(R.id.custom_container);
+JSONObject params = new JSONObject(2);
+params.put("filePath", "/data/data/com.seal.office.demo/files/1.docx");
+params.put("readViewWidth", 1000);
+SealOfficeEngineApi.openFile(MainActivity.this, customContainer, params, new ISealReaderCallback() {
+    @Override
+    public void callback(int code, String msg) {
+        Log.e("嵌入打开docx：" + code, msg);
+    }
+});
+```
+
+
 
 ##### （3）添加水印
 

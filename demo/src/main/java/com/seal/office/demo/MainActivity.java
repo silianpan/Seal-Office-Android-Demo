@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         // 参数传递
         JSONObject params = new JSONObject();
         params.put("waterMarkText", "你好，世界\n准备好了吗？时刻准备着");
+        params.put("isDeleteFile", false);
 
         // 文件url
         findViewById(R.id.open_file_button).setOnClickListener(new View.OnClickListener() {
@@ -62,6 +64,23 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void callback(int code, String msg) {
                         Log.e("打开docx：" + code, msg);
+                    }
+                });
+            }
+        });
+
+        // 嵌入打开docx
+        findViewById(R.id.open_docx_emed_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FrameLayout customContainer = findViewById(R.id.custom_container);
+                JSONObject params = new JSONObject(2);
+                params.put("filePath", "/data/data/com.seal.office.demo/files/1.docx");
+                params.put("readViewWidth", 1000);
+                SealOfficeEngineApi.openFile(MainActivity.this, customContainer, params, new ISealReaderCallback() {
+                    @Override
+                    public void callback(int code, String msg) {
+                        Log.e("嵌入打开docx：" + code, msg);
                     }
                 });
             }
