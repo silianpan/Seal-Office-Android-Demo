@@ -63,6 +63,16 @@ implementation 'net.lingala.zip4j:zip4j:2.11.5'
 
 #### 4、插件初始化（在应用启动时进行调用）
 
+#### 4.1 传递授权文件路径
+
+如授权文件在`assets/product/seal-office.license`目录下，请传递`product/seal-office.license`，如下：
+
+```java
+SealOfficeEngineApi.initLicenseFile("product/seal-office.license");
+```
+
+#### 4.2 初始化
+
 ```java
 SealOfficeEngineApi.initEngine(MainActivity.this, new ISealReaderCallback() {
   @Override
