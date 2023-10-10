@@ -104,9 +104,12 @@
 
         <FrameLayout
             android:id="@+id/custom_container"
-            android:background="@android:color/white"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:background="@android:color/holo_red_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="200dp"
+            android:layout_marginRight="200dp" />
 
     </LinearLayout>
 
