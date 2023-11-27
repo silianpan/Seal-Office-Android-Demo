@@ -1,17 +1,21 @@
 package com.seal.office.demo;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSONObject;
 import com.seal.office.aar.api.ISealReaderCallback;
 import com.seal.office.aar.api.SealOfficeEngineApi;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        copyAssetsFileToAppFiles("file" + File.separator + "test.docx", "test.docx");
+        SealOfficeEngineApi.initLicenseFile("product/seal-office.license");
 
         // 插件初始化
         SealOfficeEngineApi.initEngine(MainActivity.this, new ISealReaderCallback() {
@@ -36,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         // 参数传递
         JSONObject params = new JSONObject();
         params.put("waterMarkText", "你好，世界\n准备好了吗？时刻准备着");
-        params.put("isDeleteFile", false);
 
         // 文件url
         findViewById(R.id.open_file_button).setOnClickListener(new View.OnClickListener() {
@@ -55,32 +61,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // docx
-        findViewById(R.id.open_docx_button).setOnClickListener(new View.OnClickListener() {
+        // 本地docx
+        findViewById(R.id.open_local_docx_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                params.put("url", "http://silianpan.cn/upload/2022/01/01/1.docx");
+                JSONObject params = new JSONObject();
+                params.put("waterMarkText", "您好\n这是一个本地docx");
+                params.put("url", getFilesDir().getAbsolutePath() + File.separator + "test.docx");
+                params.put("isDeleteFile", false);
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
                     public void callback(int code, String msg) {
-                        Log.e("打开docx：" + code, msg);
+                        Log.e("打开本地docx：" + code, msg);
                     }
                 });
             }
         });
 
-        // 嵌入打开docx
-        findViewById(R.id.open_docx_emed_button).setOnClickListener(new View.OnClickListener() {
+        // docx
+        findViewById(R.id.open_docx_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FrameLayout customContainer = findViewById(R.id.custom_container);
-                JSONObject params = new JSONObject(2);
-                params.put("filePath", "/data/data/com.seal.office.demo/files/1.docx");
-                params.put("readViewWidth", 1000);
-                SealOfficeEngineApi.openFile(MainActivity.this, customContainer, params, new ISealReaderCallback() {
+                JSONObject params = new JSONObject();
+                params.put("waterMarkText", "您好\n这是一个在线docx");
+                params.put("url", "http://silianpan.cn/upload/2022/01/01/1.docx");
+                SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
                     public void callback(int code, String msg) {
-                        Log.e("嵌入打开docx：" + code, msg);
+                        Log.e("打开在线docx：" + code, msg);
                     }
                 });
             }
@@ -94,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
                     public void callback(int code, String msg) {
-                        Log.e("打开xlsx：" + code, msg);
+                        Log.e("打开在线xlsx：" + code, msg);
                     }
                 });
             }
@@ -108,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
                     public void callback(int code, String msg) {
-                        Log.e("打开pptx：" + code, msg);
+                        Log.e("打开在线pptx：" + code, msg);
                     }
                 });
             }
@@ -124,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
                     public void callback(int code, String msg) {
-                        Log.e("打开pdf：" + code, msg);
+                        Log.e("打开在线pdf：" + code, msg);
                     }
                 });
             }
@@ -137,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject params = new JSONObject();
                 params.put("imageUrls", new String[]{"http://silianpan.cn/upload/2022/01/01/1.jpg", "http://silianpan.cn/upload/2022/01/01/1.png"});
                 params.put("isSaveImg", true);
-                SealOfficeEngineApi.openFileImage(MainActivity.this, params);
+//                SealOfficeEngineApi.openFileImage(MainActivity.this, params);
             }
         });
 
@@ -147,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 JSONObject params = new JSONObject();
                 params.put("videoUrl", "http://silianpan.cn/upload/2022/01/01/1.mp3");
-                SealOfficeEngineApi.openFileVideo(MainActivity.this, params);
+//                SealOfficeEngineApi.openFileVideo(MainActivity.this, params);
             }
         });
 
@@ -157,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 JSONObject params = new JSONObject();
                 params.put("videoUrl", "http://silianpan.cn/upload/2022/01/01/1.mp4");
-                SealOfficeEngineApi.openFileVideo(MainActivity.this, params);
+//                SealOfficeEngineApi.openFileVideo(MainActivity.this, params);
             }
         });
 
@@ -176,5 +184,39 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    /**
+     * 从assets目录中复制某文件内容
+     *
+     * @param assetFileName assets目录下的文件
+     * @param newFileName   复制到/data/data/package_name/files/目录下文件名
+     */
+    private void copyAssetsFileToAppFiles(String assetFileName, String newFileName) {
+        InputStream is = null;
+        FileOutputStream fos = null;
+        try {
+            is = this.getAssets().open(assetFileName);
+            fos = this.openFileOutput(newFileName, Context.MODE_PRIVATE);
+            int byteCount = 0;
+            byte[] buffer = new byte[1024];
+            while ((byteCount = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, byteCount);
+            }
+            fos.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
