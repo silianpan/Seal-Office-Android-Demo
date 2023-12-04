@@ -49,8 +49,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 EditText fileUrlText = findViewById(R.id.file_url);
+                EditText fileTypeText = findViewById(R.id.file_type);
+                EditText fileNameText = findViewById(R.id.file_name);
                 if (!TextUtils.isEmpty(fileUrlText.getText())) {
                     params.put("url", fileUrlText.getText());
+                }
+                if (!TextUtils.isEmpty(fileTypeText.getText())) {
+                    params.put("fileType", fileTypeText.getText());
+                }
+                if (!TextUtils.isEmpty(fileNameText.getText())) {
+                    params.put("fileName", fileNameText.getText());
                 }
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override

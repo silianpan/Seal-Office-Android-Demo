@@ -34,6 +34,22 @@
             android:hint="文件url"
             android:inputType="text" />
 
+        <EditText
+            android:id="@+id/file_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="16"
+            android:hint="fileType"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/file_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="16"
+            android:hint="fileName"
+            android:inputType="text" />
+
         <Button
             android:id="@+id/open_file_button"
             android:layout_width="wrap_content"
