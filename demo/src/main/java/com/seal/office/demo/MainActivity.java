@@ -6,12 +6,16 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.seal.image.aar.api.SealImageEngineApi;
 import com.seal.office.aar.api.ISealReaderCallback;
 import com.seal.office.aar.api.SealOfficeEngineApi;
+import com.seal.video.aar.api.SealVideoEngineApi;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
             public void callback(int code, String msg) {
                 Log.e("" + code, msg);
             }
+
+            @Override
+            public void menuClick(JSONObject jsonObject) {
+
+            }
         });
 
         // 获取版本号
@@ -43,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
         // 参数传递
         JSONObject params = new JSONObject();
         params.put("waterMarkText", "你好，世界\n准备好了吗？时刻准备着");
+        params.put("menuItems", new JSONArray() {{
+            add("下载");
+            add("分享");
+        }});
 
         // 文件url
         findViewById(R.id.open_file_button).setOnClickListener(new View.OnClickListener() {
@@ -65,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
                     public void callback(int code, String msg) {
                         Log.e("打开文件URL：" + code, msg);
                     }
+
+                    @Override
+                    public void menuClick(JSONObject jsonObject) {
+                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
         });
@@ -77,10 +95,19 @@ public class MainActivity extends AppCompatActivity {
                 params.put("waterMarkText", "您好\n这是一个本地docx");
                 params.put("url", getFilesDir().getAbsolutePath() + File.separator + "test.docx");
                 params.put("isDeleteFile", false);
+                params.put("menuItems", new JSONArray() {{
+                    add("下载");
+                    add("分享");
+                }});
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
                     public void callback(int code, String msg) {
                         Log.e("打开本地docx：" + code, msg);
+                    }
+
+                    @Override
+                    public void menuClick(JSONObject jsonObject) {
+                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -93,10 +120,19 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject params = new JSONObject();
                 params.put("waterMarkText", "您好\n这是一个在线docx");
                 params.put("url", "http://silianpan.cn/upload/2022/01/01/1.docx");
+                params.put("menuItems", new JSONArray() {{
+                    add("下载");
+                    add("分享");
+                }});
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
                     public void callback(int code, String msg) {
                         Log.e("打开在线docx：" + code, msg);
+                    }
+
+                    @Override
+                    public void menuClick(JSONObject jsonObject) {
+                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -112,6 +148,11 @@ public class MainActivity extends AppCompatActivity {
                     public void callback(int code, String msg) {
                         Log.e("打开在线xlsx：" + code, msg);
                     }
+
+                    @Override
+                    public void menuClick(JSONObject jsonObject) {
+                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
         });
@@ -125,6 +166,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void callback(int code, String msg) {
                         Log.e("打开在线pptx：" + code, msg);
+                    }
+
+                    @Override
+                    public void menuClick(JSONObject jsonObject) {
+                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -142,6 +188,11 @@ public class MainActivity extends AppCompatActivity {
                     public void callback(int code, String msg) {
                         Log.e("打开在线pdf：" + code, msg);
                     }
+
+                    @Override
+                    public void menuClick(JSONObject jsonObject) {
+                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
         });
@@ -153,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject params = new JSONObject();
                 params.put("imageUrls", new String[]{"http://silianpan.cn/upload/2022/01/01/1.jpg", "http://silianpan.cn/upload/2022/01/01/1.png"});
                 params.put("isSaveImg", true);
-//                SealOfficeEngineApi.openFileImage(MainActivity.this, params);
+                SealImageEngineApi.openFileImage(MainActivity.this, params);
             }
         });
 
@@ -163,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 JSONObject params = new JSONObject();
                 params.put("videoUrl", "http://silianpan.cn/upload/2022/01/01/1.mp3");
-//                SealOfficeEngineApi.openFileVideo(MainActivity.this, params);
+                SealVideoEngineApi.openFileVideo(MainActivity.this, params);
             }
         });
 
@@ -173,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 JSONObject params = new JSONObject();
                 params.put("videoUrl", "http://silianpan.cn/upload/2022/01/01/1.mp4");
-//                SealOfficeEngineApi.openFileVideo(MainActivity.this, params);
+                SealVideoEngineApi.openFileVideo(MainActivity.this, params);
             }
         });
 
@@ -188,6 +239,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void callback(int code, String msg) {
                         Log.e("WPS编辑：" + code, msg);
+                    }
+
+                    @Override
+                    public void menuClick(JSONObject jsonObject) {
+
                     }
                 });
             }
