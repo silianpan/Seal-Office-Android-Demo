@@ -106,6 +106,19 @@ SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback(
   // 顶部状态栏，自定义菜单功能按钮点击事件回调函数
   @Override
   public void menuClick(JSONObject jsonObject) {
+    /**
+      {
+      "code": 1011,
+      "result": {
+          "filePath": "/data/user/0/com.seal.uniplugin/files/2.pdf",
+          "fileUrl": "http://silianpan.cn/upload/2022/01/01/2.pdf",
+          "menuItemId": 2,
+          "menuItemTitle": "分享",
+          "fileName": "2.pdf"
+      },
+      "msg": "导航栏菜单点击事件"
+      }
+    */
     Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
   }
 });
