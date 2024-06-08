@@ -10,7 +10,7 @@ Seal-OfficeOnline是跨平台Office文档预览原生插件，具有以下特点
 * 支持Android和IOS
 * 支持全屏预览，也支持组件嵌入方式预览
 * 支持WPS应用预览或编辑文档
-* 支持水印、防截屏、自定义状态栏、保存图片等诸多可选配置
+* 支持水印、防截屏、自定义状态栏、自定义菜单功能按钮、保存图片等诸多可选配置
 * 支持docx、pptx、xlsx等多种office文档格式，也支持常用图片（jpg、png、bmp等）和音视频格式（mp3、flac、wma、mp4、mkv等）
 * 支持wps、doc、docx、xls、xlsx、csv、ppt、pptx、txt、properties、log、Log、ini、lua、conf、m、cpp、java、h、xml、html、htm等常见文档格式
 
@@ -93,10 +93,20 @@ JSONObject params = new JSONObject();
 params.put("waterMarkText", "你好，世界\n准备好了吗？时刻准备着");
 params.put("url", "http://silianpan.cn/upload/2022/01/01/1.docx");
 params.put("isDeleteFile", false);
+// 顶部状态栏自定义菜单功能按钮
+params.put("menuItems", new JSONArray() {{
+  add("下载");
+  add("分享");
+}});
 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
   @Override
   public void callback(int code, String msg) {
     Log.e("" + code, msg);
+  }
+  // 顶部状态栏，自定义菜单功能按钮点击事件回调函数
+  @Override
+  public void menuClick(JSONObject jsonObject) {
+    Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
   }
 });
 ```
