@@ -1,6 +1,6 @@
 ## Seal-OfficeOnline文档预览插件原生Android项目集成方式
 
-国内访问：[Gitee]（https://gitee.com/twofloor/Seal-Office-Android-Demo）
+国内访问：[Gitee](https://gitee.com/twofloor/Seal-Office-Android-Demo)
 
 ### 一、介绍
 
