@@ -1,5 +1,7 @@
 ## Seal-OfficeOnline文档预览插件原生Android项目集成方式
 
+国内访问：[Gitee]（https://gitee.com/twofloor/Seal-Office-Android-Demo）
+
 ### 一、介绍
 
 Seal-OfficeOnline是跨平台Office文档预览原生插件，具有以下特点：
@@ -11,7 +13,7 @@ Seal-OfficeOnline是跨平台Office文档预览原生插件，具有以下特点
 * 支持全屏预览，也支持组件嵌入方式预览
 * 支持WPS应用预览或编辑文档
 * 支持水印、防截屏、自定义状态栏、自定义菜单功能按钮、保存图片等诸多可选配置
-* 支持docx、pptx、xlsx等多种office文档格式，也支持常用图片（jpg、png、bmp等）和音视频格式（mp3、flac、wma、mp4、mkv等）
+* 支持pdf、docx、pptx、xlsx等多种office文档格式，也支持常用图片（jpg、png、bmp等）和音视频格式（mp3、flac、wma、mp4、mkv等）
 * 支持wps、doc、docx、xls、xlsx、csv、ppt、pptx、txt、properties、log、Log、ini、lua、conf、m、cpp、java、h、xml、html、htm等常见文档格式
 
 ### 二、UniApp项目集成方式
