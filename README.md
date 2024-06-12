@@ -203,7 +203,22 @@ SealOfficeEngineApi.openFileImage(MainActivity.this, params);
 ```java
 JSONObject params = new JSONObject();
 params.put("videoUrl", "http://silianpan.cn/upload/2022/01/01/1.mp4");
+params.put("menuItems", new JSONArray() {{
+  add("下载");
+  add("分享");
+}});
 SealOfficeEngineApi.openFileVideo(MainActivity.this, params);
+SealOfficeEngineApi.openFileVideo(MainActivity.this, params, new ISealImageCallback() {
+  @Override
+  public void callback(int i, String s) {
+
+  }
+
+  @Override
+  public void menuClick(JSONObject jsonObject) {
+    Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+  }
+});
 ```
 
 ##### （6）WPS预览或编辑

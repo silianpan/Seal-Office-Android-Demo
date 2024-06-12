@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.seal.image.aar.api.SealImageEngineApi;
 import com.seal.office.aar.api.ISealReaderCallback;
 import com.seal.office.aar.api.SealOfficeEngineApi;
+import com.seal.video.aar.api.ISealImageCallback;
 import com.seal.video.aar.api.SealVideoEngineApi;
 
 import java.io.File;
@@ -214,7 +215,21 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 JSONObject params = new JSONObject();
                 params.put("videoUrl", "http://silianpan.cn/upload/2022/01/01/1.mp3");
-                SealVideoEngineApi.openFileVideo(MainActivity.this, params);
+                params.put("menuItems", new JSONArray() {{
+                    add("下载");
+                    add("分享");
+                }});
+                SealVideoEngineApi.openFileVideo(MainActivity.this, params, new ISealImageCallback() {
+                    @Override
+                    public void callback(int i, String s) {
+
+                    }
+
+                    @Override
+                    public void menuClick(JSONObject jsonObject) {
+                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -224,7 +239,21 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 JSONObject params = new JSONObject();
                 params.put("videoUrl", "http://silianpan.cn/upload/2022/01/01/1.mp4");
-                SealVideoEngineApi.openFileVideo(MainActivity.this, params);
+                params.put("menuItems", new JSONArray() {{
+                    add("下载");
+                    add("分享");
+                }});
+                SealVideoEngineApi.openFileVideo(MainActivity.this, params, new ISealImageCallback() {
+                    @Override
+                    public void callback(int i, String s) {
+
+                    }
+
+                    @Override
+                    public void menuClick(JSONObject jsonObject) {
+                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
