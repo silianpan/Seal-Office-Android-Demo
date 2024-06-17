@@ -9,8 +9,8 @@ android {
         applicationId "com.seal.office.demo"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 325
-        versionName "3.2.5"
+        versionCode 326
+        versionName "3.2.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

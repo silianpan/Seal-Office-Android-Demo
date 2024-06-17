@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -75,6 +76,34 @@ public class MainActivity extends AppCompatActivity {
                     params.put("fileName", fileNameText.getText());
                 }
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
+                    @Override
+                    public void callback(int code, String msg) {
+                        Log.e("打开文件URL：" + code, msg);
+                    }
+
+                    @Override
+                    public void menuClick(JSONObject jsonObject) {
+                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        // 自定义FrameLayout预览
+        findViewById(R.id.open_custom_frame_layout_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONObject params = new JSONObject();
+                params.put("waterMarkText", "您好\n这是一个本地docx");
+                params.put("url", getFilesDir().getAbsolutePath() + File.separator + "test.docx");
+                params.put("isDeleteFile", false);
+                params.put("menuItems", new JSONArray() {{
+                    add("下载");
+                    add("分享");
+                }});
+                // 获取自定义FrameLayout
+                FrameLayout customFrameLayout = findViewById(R.id.custom_frame_layout);
+                SealOfficeEngineApi.openFile(MainActivity.this, customFrameLayout, params, new ISealReaderCallback() {
                     @Override
                     public void callback(int code, String msg) {
                         Log.e("打开文件URL：" + code, msg);

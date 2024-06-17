@@ -1,108 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    android:id="@+id/id_scrollView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:scrollbars="vertical">
 
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Hello World!"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center">
+        <!--    <TextView-->
+        <!--        android:layout_width="wrap_content"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:text="Hello World!"-->
+        <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--        app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--        app:layout_constraintRight_toRightOf="parent"-->
+        <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-        <EditText
-            android:id="@+id/file_url"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="16"
-            android:hint="文件url"
-            android:inputType="text" />
+            android:baselineAligned="false"
+            android:orientation="vertical"
+            android:gravity="center">
 
-        <EditText
-            android:id="@+id/file_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="16"
-            android:hint="fileType"
-            android:inputType="text" />
+            <EditText
+                android:id="@+id/file_url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="16"
+                android:hint="文件url"
+                android:inputType="text" />
 
-        <EditText
-            android:id="@+id/file_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="16"
-            android:hint="fileName"
-            android:inputType="text" />
+            <EditText
+                android:id="@+id/file_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="16"
+                android:hint="fileType"
+                android:inputType="text" />
 
-        <Button
-            android:id="@+id/open_file_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="打开输入文件url" />
+            <EditText
+                android:id="@+id/file_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="16"
+                android:hint="fileName"
+                android:inputType="text" />
 
-        <Button
-            android:id="@+id/open_local_docx_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="打开本地docx" />
+            <Button
+                android:id="@+id/open_file_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="打开输入文件url" />
 
-        <Button
-            android:id="@+id/open_docx_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="打开在线docx" />
-        <Button
-            android:id="@+id/open_xlsx_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="打开在线xlsx" />
-        <Button
-            android:id="@+id/open_pptx_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="打开在线pptx" />
-        <Button
-            android:id="@+id/open_pdf_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="打开在线pdf" />
-        <Button
-            android:id="@+id/open_jpg_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="打开jpg" />
-        <Button
-            android:id="@+id/open_mp4_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="打开mp4" />
-        <Button
-            android:id="@+id/open_mp3_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="打开mp3" />
-        <Button
-            android:id="@+id/open_wps_edit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="WPS编辑" />
+            <Button
+                android:id="@+id/open_custom_frame_layout_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自定义FrameLayout预览(往下滑动)" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/open_local_docx_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="打开本地docx" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/open_docx_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="打开在线docx" />
+
+            <Button
+                android:id="@+id/open_xlsx_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="打开在线xlsx" />
+
+            <Button
+                android:id="@+id/open_pptx_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="打开在线pptx" />
+
+            <Button
+                android:id="@+id/open_pdf_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="打开在线pdf" />
+
+            <Button
+                android:id="@+id/open_jpg_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="打开jpg" />
+
+            <Button
+                android:id="@+id/open_mp4_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="打开mp4" />
+
+            <Button
+                android:id="@+id/open_mp3_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="打开mp3" />
+
+            <Button
+                android:id="@+id/open_wps_edit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WPS编辑" />
+
+            <FrameLayout
+                android:id="@+id/custom_frame_layout"
+                android:background="@android:color/white"
+                android:layout_width="300dp"
+                android:layout_height="600dp"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
