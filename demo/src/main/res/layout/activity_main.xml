@@ -26,7 +26,8 @@
             android:layout_height="wrap_content"
             android:baselineAligned="false"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:id="@+id/view_root">
 
             <EditText
                 android:id="@+id/file_url"
@@ -118,12 +119,12 @@
                 android:layout_height="wrap_content"
                 android:text="WPS编辑" />
 
-            <FrameLayout
-                android:id="@+id/custom_frame_layout"
-                android:background="@android:color/white"
-                android:layout_width="300dp"
-                android:layout_height="600dp"
-                android:orientation="vertical" />
+<!--            <FrameLayout-->
+<!--                android:id="@+id/custom_frame_layout"-->
+<!--                android:background="@android:color/white"-->
+<!--                android:layout_width="300dp"-->
+<!--                android:layout_height="600dp"-->
+<!--                android:orientation="vertical" />-->
 
         </LinearLayout>
 
