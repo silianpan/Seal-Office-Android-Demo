@@ -1,14 +1,12 @@
 package com.seal.office.demo;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -95,42 +93,47 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.open_custom_frame_layout_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONObject params = new JSONObject();
-                params.put("waterMarkText", "您好\n这是一个本地docx");
-                params.put("url", getFilesDir().getAbsolutePath() + File.separator + "test.docx");
-                params.put("isDeleteFile", false);
-                params.put("menuItems", new JSONArray() {{
-                    add("下载");
-                    add("分享");
-                }});
-                // 第一种方式：通过xml获取自定义FrameLayout
-//                FrameLayout customFrameLayout = findViewById(R.id.custom_frame_layout);
+//                JSONObject params = new JSONObject();
+//                params.put("waterMarkText", "您好\n这是一个本地docx");
+//                params.put("url", getFilesDir().getAbsolutePath() + File.separator + "test.docx");
+//                params.put("isDeleteFile", false);
+//                params.put("menuItems", new JSONArray() {{
+//                    add("下载");
+//                    add("分享");
+//                }});
+//                // 第一种方式：通过xml获取自定义FrameLayout
+////                FrameLayout customFrameLayout = findViewById(R.id.custom_frame_layout);
+//
+//                // 第二种方式：动态创建FrameLayout
+//                // 1. 创建一个 FrameLayout 对象
+//                FrameLayout customFrameLayout = new FrameLayout(MainActivity.this);
+//                customFrameLayout.setBackgroundColor(Color.WHITE);
+//                // 2. 设置 FrameLayout 的布局参数
+//                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(800,1000);
+//                customFrameLayout.setLayoutParams(layoutParams);
+//                // 3. 将 FrameLayout 添加到父视图
+//                ViewGroup viewLayout = findViewById(R.id.view_root);
+//                viewLayout.addView(customFrameLayout);
+//                SealOfficeEngineApi.openFile(MainActivity.this, customFrameLayout, params, new ISealReaderCallback() {
+//                    @Override
+//                    public void callback(int code, String msg) {
+//                        Log.e("打开文件URL：" + code, msg);
+//                        if (code == 1010) {
+//                            // 页面返回，删除布局，避免重复添加
+//                            viewLayout.removeView(customFrameLayout);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void menuClick(JSONObject jsonObject) {
+//                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
-                // 第二种方式：动态创建FrameLayout
-                // 1. 创建一个 FrameLayout 对象
-                FrameLayout customFrameLayout = new FrameLayout(MainActivity.this);
-                customFrameLayout.setBackgroundColor(Color.WHITE);
-                // 2. 设置 FrameLayout 的布局参数
-                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(800,1000);
-                customFrameLayout.setLayoutParams(layoutParams);
-                // 3. 将 FrameLayout 添加到父视图
-                ViewGroup viewLayout = findViewById(R.id.view_root);
-                viewLayout.addView(customFrameLayout);
-                SealOfficeEngineApi.openFile(MainActivity.this, customFrameLayout, params, new ISealReaderCallback() {
-                    @Override
-                    public void callback(int code, String msg) {
-                        Log.e("打开文件URL：" + code, msg);
-                        if (code == 1010) {
-                            // 页面返回，删除布局，避免重复添加
-                            viewLayout.removeView(customFrameLayout);
-                        }
-                    }
-
-                    @Override
-                    public void menuClick(JSONObject jsonObject) {
-                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                Intent intent = new Intent(MainActivity.this, CustomActivity.class);
+                // 可选：传递数据给DynamicActivity
+                intent.putExtra("key", "Hello, DynamicActivity!");
+                startActivity(intent);
             }
         });
 
