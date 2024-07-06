@@ -1,12 +1,17 @@
 package com.seal.office.demo;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -134,6 +139,58 @@ public class MainActivity extends AppCompatActivity {
                 // 可选：传递数据给DynamicActivity
                 intent.putExtra("key", "Hello, DynamicActivity!");
                 startActivity(intent);
+            }
+        });
+
+        // 打开对话框预览文档
+        findViewById(R.id.open_dialog_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 创建对话框
+                Dialog dialog = new Dialog(MainActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.activity_custom);
+
+                // 设置对话框宽度和高度
+                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                layoutParams.copyFrom(dialog.getWindow().getAttributes());
+                layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+                layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                dialog.getWindow().setAttributes(layoutParams);
+
+                // 在对话框布局中找到自定义的 FrameLayout 和关闭按钮
+                FrameLayout customFrameLayout = dialog.findViewById(R.id.custom_frame_layout_custom);
+                Button closeButton = dialog.findViewById(R.id.close_dialog_btn);
+
+                // 关闭按钮的操作
+                closeButton.setOnClickListener(view -> dialog.dismiss());
+
+                JSONObject params = new JSONObject();
+                params.put("waterMarkText", "您好\n这是一个本地docx");
+                params.put("url", getFilesDir().getAbsolutePath() + File.separator + "test.docx");
+                params.put("isDeleteFile", false);
+                params.put("menuItems", new JSONArray() {{
+                    add("下载");
+                    add("分享");
+                }});
+                SealOfficeEngineApi.openFile(MainActivity.this, customFrameLayout, params, new ISealReaderCallback() {
+                    @Override
+                    public void callback(int code, String msg) {
+                        Log.e("打开文件URL：" + code, msg);
+                        if (code == 1010) {
+                            // 页面返回，删除布局，避免重复添加
+                            customFrameLayout.removeAllViews();
+                            dialog.dismiss();
+                        }
+                    }
+                    @Override
+                    public void menuClick(JSONObject jsonObject) {
+                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                // 显示对话框
+                dialog.show();
             }
         });
 
