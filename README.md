@@ -9,13 +9,14 @@
 Seal-OfficeOnline是跨平台Office文档预览原生插件，具有以下特点：
 
 * 支持UniApp项目集成，也支持原生Android项目集成
-* 非腾讯X5，无内核加载，高效率、稳定高可用
-* 支持在线文档，也支持离线设备本地文档
+* **非腾讯X5**，无内核加载，高效率、稳定高可用
+* 支持在线文档，也支持**离线设备**本地文档
 * 支持Android和IOS
-* 支持全屏预览，也支持组件嵌入方式预览
-* 支持返回当前页码和总页数，跳转指定页码
-* 支持WPS应用预览或编辑文档
-* 支持水印、防截屏、自定义状态栏、自定义菜单功能按钮、保存图片等诸多可选配置
+* 支持全屏预览，也支持**组件嵌入**方式预览
+* 支持返回**当前页码和总页数**，**跳转指定页码**
+* 支持顶部状态栏**自定义菜单**功能按钮
+* 支持**WPS应用预览或编辑**文档
+* 支持**水印**、**防截屏**、**自定义状态栏**、**自定义菜单功能按钮**、**保存图片**等诸多可选配置
 * 支持pdf、docx、pptx、xlsx等多种office文档格式，也支持常用图片（jpg、png、bmp等）和音视频格式（mp3、flac、wma、mp4、mkv等）
 * 支持wps、doc、docx、xls、xlsx、csv、ppt、pptx、txt、properties、log、Log、ini、lua、conf、m、cpp、java、h、xml、html、htm等常见文档格式
 
@@ -57,13 +58,12 @@ implementation 'com.google.android.material:material:1.3.0'
 implementation "com.github.bumptech.glide:glide:4.9.0"
 implementation "androidx.constraintlayout:constraintlayout:2.1.3"
 implementation 'net.lingala.zip4j:zip4j:2.11.5'
+// ================= SealOffice文档预览需要添加的依赖包 end ================
 
 // ============ 音视频播放，不需要直接去掉 begin ==========
 implementation 'xyz.doikki.android.dkplayer:dkplayer-java:3.3.7'
 implementation 'xyz.doikki.android.dkplayer:dkplayer-ui:3.3.7'
 // ============ 音视频播放，不需要直接去掉 end ============
-
-// ================= SealOffice文档预览需要添加的依赖包 end ================
 ```
 
 #### 4、插件初始化（在应用启动时进行调用）
@@ -162,12 +162,14 @@ SealOfficeEngineApi.openFile(activity, frameLayout, filePath, new ISealReaderCal
 *    （1）url String（必传） 文档本地绝对路径
 * 	 （2）readViewWidth Integer（可选） 阅读视图宽度，可以根据屏幕大小计算传入
 *    （3）readViewHeight Integer（可选） 阅读视图高度，可以根据屏幕大小计算传入，建议不传
-*	 （4）targetPage
+*    （4）readBgColor String（可选）阅读器背景颜色
+*	   （5）targetPage Integer（可选）跳转页码
 */
 FrameLayout customContainer = findViewById(R.id.custom_container);
 JSONObject params = new JSONObject(2);
 params.put("url", "/data/data/com.seal.office.demo/files/1.docx");
 params.put("readViewWidth", 1000);
+params.put("targetPage", 5);
 SealOfficeEngineApi.openFile(MainActivity.this, customContainer, params, new ISealReaderCallback() {
     @Override
     public void callback(int code, String msg) {
@@ -244,6 +246,18 @@ SealOfficeEngineApi.openFileWPS(MainActivity.this, params, new ISealReaderCallba
 boolean hasWps = SealOfficeEngineApi.checkWps(MainActivity.this);
 ```
 
+##### （8）跳转文档指定页码，<span style="color:red">**注意：需要等文档加载完成之后，才能调用此接口，如果需要直接跳转，在openFile接口中传递`targetPage`参数**</span>
+
+使用接口：gotoPage(int targetPage)
+
+参数：targetPage，指定页码
+
+```java
+SealOfficeEngineApi.gotoPage(5);
+```
+
+
+
 #### 四、回调结果状态码说明
 
 | 状态码 | 说明                           |
@@ -265,3 +279,5 @@ boolean hasWps = SealOfficeEngineApi.checkWps(MainActivity.this);
 | 1001   | 文档下载成功                   |
 | 1008   | 缓存文档删除成功               |
 | 1010   | 页面返回                       |
+| 1011   | 返回当前页码和总页码           |
+| 1012   | 导航栏菜单点击事件             |
