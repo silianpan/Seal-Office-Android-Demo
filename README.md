@@ -4,6 +4,11 @@
 
 [国内Gitee访问](https://gitee.com/twofloor/Seal-Office-Android-Demo)
 
+### 4.0.0版本重大更新！
+
+* 支持返回**当前页码和总页数**，**跳转指定页码**
+* 支持顶部状态栏**自定义菜单**功能按钮
+
 ### 一、介绍
 
 Seal-OfficeOnline是跨平台Office文档预览原生插件，具有以下特点：
