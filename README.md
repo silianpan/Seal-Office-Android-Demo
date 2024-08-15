@@ -13,6 +13,7 @@ Seal-OfficeOnline是跨平台Office文档预览原生插件，具有以下特点
 * 支持在线文档，也支持离线设备本地文档
 * 支持Android和IOS
 * 支持全屏预览，也支持组件嵌入方式预览
+* 支持返回当前页码和总页数，跳转指定页码
 * 支持WPS应用预览或编辑文档
 * 支持水印、防截屏、自定义状态栏、自定义菜单功能按钮、保存图片等诸多可选配置
 * 支持pdf、docx、pptx、xlsx等多种office文档格式，也支持常用图片（jpg、png、bmp等）和音视频格式（mp3、flac、wma、mp4、mkv等）
@@ -55,13 +56,13 @@ implementation 'com.facebook.fresco:fresco:1.13.0'
 implementation 'com.google.android.material:material:1.3.0'
 implementation "com.github.bumptech.glide:glide:4.9.0"
 implementation "androidx.constraintlayout:constraintlayout:2.1.3"
+implementation 'net.lingala.zip4j:zip4j:2.11.5'
 
 // ============ 音视频播放，不需要直接去掉 begin ==========
 implementation 'xyz.doikki.android.dkplayer:dkplayer-java:3.3.7'
 implementation 'xyz.doikki.android.dkplayer:dkplayer-ui:3.3.7'
 // ============ 音视频播放，不需要直接去掉 end ============
 
-implementation 'net.lingala.zip4j:zip4j:2.11.5'
 // ================= SealOffice文档预览需要添加的依赖包 end ================
 ```
 
@@ -97,6 +98,8 @@ JSONObject params = new JSONObject();
 params.put("waterMarkText", "你好，世界\n准备好了吗？时刻准备着");
 params.put("url", "http://silianpan.cn/upload/2022/01/01/1.docx");
 params.put("isDeleteFile", false);
+// 指定跳转页码
+params.put("targetPage", 5);
 // 顶部状态栏自定义菜单功能按钮
 params.put("menuItems", new JSONArray() {{
   add("下载");
@@ -156,13 +159,14 @@ SealOfficeEngineApi.openFile(activity, frameLayout, filePath, new ISealReaderCal
 * @param activity Activity对象
 * @param frameLayout FrameLayout对象
 * @param params JSONObject对象
-*    （1）filePath String（必传） 文档本地绝对路径
+*    （1）url String（必传） 文档本地绝对路径
 * 	 （2）readViewWidth Integer（可选） 阅读视图宽度，可以根据屏幕大小计算传入
 *    （3）readViewHeight Integer（可选） 阅读视图高度，可以根据屏幕大小计算传入，建议不传
+*	 （4）targetPage
 */
 FrameLayout customContainer = findViewById(R.id.custom_container);
 JSONObject params = new JSONObject(2);
-params.put("filePath", "/data/data/com.seal.office.demo/files/1.docx");
+params.put("url", "/data/data/com.seal.office.demo/files/1.docx");
 params.put("readViewWidth", 1000);
 SealOfficeEngineApi.openFile(MainActivity.this, customContainer, params, new ISealReaderCallback() {
     @Override
