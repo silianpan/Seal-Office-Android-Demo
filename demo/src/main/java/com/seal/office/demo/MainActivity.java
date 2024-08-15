@@ -1,9 +1,12 @@
 package com.seal.office.demo;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +15,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +34,66 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
+    private final String TAG = "MainActivity";
+
+    // 当前页码
+    private int mCurPage;
+    // 总页码
+    private int mPageCount;
+
+    private void gotoPage(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("输入页码，当前页码/总页码：" + mCurPage + "/" + mPageCount);
+
+        // 创建一个水平的 LinearLayout
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.HORIZONTAL);
+
+        // 创建一个 EditText 并设置为数字输入类型
+        final EditText input = new EditText(context);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1)); // 设置宽度为 0，并使其权重为 1
+
+        // 创建一个 TextView 显示当前页码/总页码
+        final TextView pageInfo = new TextView(context);
+        pageInfo.setText(String.format("%d/%d", mCurPage, mPageCount));
+        pageInfo.setPadding(10, 0, 0, 0); // 添加一些左侧填充
+
+        // 将 EditText 和 TextView 添加到布局中
+        layout.addView(input);
+        layout.addView(pageInfo);
+
+        // 设置布局为对话框的视图
+        builder.setView(layout);
+
+        // 设置确定按钮
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String pageNumber = input.getText().toString();
+                Toast.makeText(context, "输入的页码是: " + pageNumber, Toast.LENGTH_SHORT).show();
+
+                try {
+                    int page = Integer.parseInt(pageNumber);
+                    SealOfficeEngineApi.gotoPage(page);
+                } catch (NumberFormatException e) {
+                    Toast.makeText(context, "无效的页码", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // 设置取消按钮
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        // 显示对话框
+        builder.show();
+    }
+
 
 
     @Override
@@ -42,12 +107,12 @@ public class MainActivity extends AppCompatActivity {
         // 插件初始化
         SealOfficeEngineApi.initEngine(MainActivity.this, new ISealReaderCallback() {
             @Override
-            public void callback(int code, String msg) {
-                Log.e("" + code, msg);
+            public void callback(Context context, int code, String msg, JSONObject jsonObject) {
+                Log.e(TAG, code + ", " + msg);
             }
 
             @Override
-            public void menuClick(JSONObject jsonObject) {
+            public void menuClick(Context context, JSONObject jsonObject) {
 
             }
         });
@@ -59,9 +124,12 @@ public class MainActivity extends AppCompatActivity {
         // 参数传递
         JSONObject params = new JSONObject();
         params.put("waterMarkText", "你好，世界\n准备好了吗？时刻准备着");
+        // 指定跳转页码
+        params.put("targetPage", 5);
         params.put("menuItems", new JSONArray() {{
             add("下载");
             add("分享");
+            add("页码跳转");
         }});
 
         // 文件url
@@ -82,12 +150,19 @@ public class MainActivity extends AppCompatActivity {
                 }
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
-                    public void callback(int code, String msg) {
-                        Log.e("打开文件URL：" + code, msg);
+                    public void callback(Context context, int code, String msg, JSONObject jsonObject) {
+                        Log.e(TAG, "打开文件URL：" + code + ", " + msg);
+                        if (code == 1011) {
+                            int curPage = jsonObject.getIntValue("curPage");
+                            int pageCount = jsonObject.getIntValue("pageCount");
+                            mCurPage = curPage;
+                            mPageCount = pageCount;
+                            Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+                        }
                     }
 
                     @Override
-                    public void menuClick(JSONObject jsonObject) {
+                    public void menuClick(Context context, JSONObject jsonObject) {
                         Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -122,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 //                SealOfficeEngineApi.openFile(MainActivity.this, customFrameLayout, params, new ISealReaderCallback() {
 //                    @Override
 //                    public void callback(int code, String msg) {
-//                        Log.e("打开文件URL：" + code, msg);
+//                        Log.e(TAG, "打开文件URL：" + code, msg);
 //                        if (code == 1010) {
 //                            // 页面返回，删除布局，避免重复添加
 //                            viewLayout.removeView(customFrameLayout);
@@ -169,22 +244,31 @@ public class MainActivity extends AppCompatActivity {
                 params.put("waterMarkText", "您好\n这是一个本地docx");
                 params.put("url", getFilesDir().getAbsolutePath() + File.separator + "test.docx");
                 params.put("isDeleteFile", false);
+                // 指定跳转页码
+                params.put("targetPage", 5);
                 params.put("menuItems", new JSONArray() {{
                     add("下载");
                     add("分享");
                 }});
                 SealOfficeEngineApi.openFile(MainActivity.this, customFrameLayout, params, new ISealReaderCallback() {
                     @Override
-                    public void callback(int code, String msg) {
-                        Log.e("打开文件URL：" + code, msg);
+                    public void callback(Context context, int code, String msg, JSONObject jsonObject) {
+                        Log.e(TAG, "打开文件URL：" + code + ", " + msg);
                         if (code == 1010) {
                             // 页面返回，删除布局，避免重复添加
                             customFrameLayout.removeAllViews();
                             dialog.dismiss();
                         }
+                        if (code == 1011) {
+                            int curPage = jsonObject.getIntValue("curPage");
+                            int pageCount = jsonObject.getIntValue("pageCount");
+                            mCurPage = curPage;
+                            mPageCount = pageCount;
+                            Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+                        }
                     }
                     @Override
-                    public void menuClick(JSONObject jsonObject) {
+                    public void menuClick(Context context, JSONObject jsonObject) {
                         Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -202,19 +286,30 @@ public class MainActivity extends AppCompatActivity {
                 params.put("waterMarkText", "您好\n这是一个本地docx");
                 params.put("url", getFilesDir().getAbsolutePath() + File.separator + "test.docx");
                 params.put("isDeleteFile", false);
+                // 指定跳转页码
+                params.put("targetPage", 5);
                 params.put("menuItems", new JSONArray() {{
                     add("下载");
                     add("分享");
+                    add("跳转页码");
                 }});
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
-                    public void callback(int code, String msg) {
-                        Log.e("打开本地docx：" + code, msg);
+                    public void callback(Context context, int code, String msg, JSONObject jsonObject) {
+                        Log.e(TAG, "打开本地docx：" + code + ", " + msg);
+                        if (code == 1011) {
+                            int curPage = jsonObject.getIntValue("curPage");
+                            int pageCount = jsonObject.getIntValue("pageCount");
+                            mCurPage = curPage;
+                            mPageCount = pageCount;
+                            Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+                        }
                     }
 
                     @Override
-                    public void menuClick(JSONObject jsonObject) {
+                    public void menuClick(Context context, JSONObject jsonObject) {
                         Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+                        gotoPage(context);
                     }
                 });
             }
@@ -227,19 +322,30 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject params = new JSONObject();
                 params.put("waterMarkText", "您好\n这是一个在线docx");
                 params.put("url", "http://silianpan.cn/upload/2022/01/01/1.docx");
+                // 指定跳转页码
+                params.put("targetPage", 5);
                 params.put("menuItems", new JSONArray() {{
                     add("下载");
                     add("分享");
+                    add("跳转页码");
                 }});
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
-                    public void callback(int code, String msg) {
-                        Log.e("打开在线docx：" + code, msg);
+                    public void callback(Context context, int code, String msg, JSONObject jsonObject) {
+                        Log.e(TAG, "打开在线docx：" + code + ", " + msg);
+                        if (code == 1011) {
+                            int curPage = jsonObject.getIntValue("curPage");
+                            int pageCount = jsonObject.getIntValue("pageCount");
+                            mCurPage = curPage;
+                            mPageCount = pageCount;
+                            Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+                        }
                     }
 
                     @Override
-                    public void menuClick(JSONObject jsonObject) {
+                    public void menuClick(Context context, JSONObject jsonObject) {
                         Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+                        gotoPage(context);
                     }
                 });
             }
@@ -252,13 +358,21 @@ public class MainActivity extends AppCompatActivity {
                 params.put("url", "http://silianpan.cn/upload/2022/01/01/1.xlsx");
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
-                    public void callback(int code, String msg) {
-                        Log.e("打开在线xlsx：" + code, msg);
+                    public void callback(Context context, int code, String msg, JSONObject jsonObject) {
+                        Log.e(TAG, "打开在线xlsx：" + code + ", " + msg);
+                        if (code == 1011) {
+                            int curPage = jsonObject.getIntValue("curPage");
+                            int pageCount = jsonObject.getIntValue("pageCount");
+                            mCurPage = curPage;
+                            mPageCount = pageCount;
+                            Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+                        }
                     }
 
                     @Override
-                    public void menuClick(JSONObject jsonObject) {
+                    public void menuClick(Context context, JSONObject jsonObject) {
                         Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+                        gotoPage(context);
                     }
                 });
             }
@@ -271,13 +385,21 @@ public class MainActivity extends AppCompatActivity {
                 params.put("url", "http://silianpan.cn/upload/2022/01/01/1.pptx");
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
-                    public void callback(int code, String msg) {
-                        Log.e("打开在线pptx：" + code, msg);
+                    public void callback(Context context, int code, String msg, JSONObject jsonObject) {
+                        Log.e(TAG, "打开在线pptx：" + code + ", " + msg);
+                        if (code == 1011) {
+                            int curPage = jsonObject.getIntValue("curPage");
+                            int pageCount = jsonObject.getIntValue("pageCount");
+                            mCurPage = curPage;
+                            mPageCount = pageCount;
+                            Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+                        }
                     }
 
                     @Override
-                    public void menuClick(JSONObject jsonObject) {
+                    public void menuClick(Context context, JSONObject jsonObject) {
                         Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+                        gotoPage(context);
                     }
                 });
             }
@@ -292,13 +414,21 @@ public class MainActivity extends AppCompatActivity {
 //                params.put("fileType", "pdf");
                 SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
-                    public void callback(int code, String msg) {
-                        Log.e("打开在线pdf：" + code, msg);
+                    public void callback(Context context, int code, String msg, JSONObject jsonObject) {
+                        Log.e(TAG, "打开在线pdf：" + code + ", " + msg);
+                        if (code == 1011) {
+                            int curPage = jsonObject.getIntValue("curPage");
+                            int pageCount = jsonObject.getIntValue("pageCount");
+                            mCurPage = curPage;
+                            mPageCount = pageCount;
+                            Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+                        }
                     }
 
                     @Override
-                    public void menuClick(JSONObject jsonObject) {
+                    public void menuClick(Context context, JSONObject jsonObject) {
                         Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+                        gotoPage(context);
                     }
                 });
             }
@@ -372,12 +502,12 @@ public class MainActivity extends AppCompatActivity {
                 params.put("openMode", "EditMode");
                 SealOfficeEngineApi.openFileWPS(MainActivity.this, params, new ISealReaderCallback() {
                     @Override
-                    public void callback(int code, String msg) {
-                        Log.e("WPS编辑：" + code, msg);
+                    public void callback(Context context, int code, String msg, JSONObject jsonObject) {
+                        Log.e(TAG, "WPS编辑：" + code + ", " + msg);
                     }
 
                     @Override
-                    public void menuClick(JSONObject jsonObject) {
+                    public void menuClick(Context context, JSONObject jsonObject) {
 
                     }
                 });
