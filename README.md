@@ -73,7 +73,7 @@ implementation 'xyz.doikki.android.dkplayer:dkplayer-ui:3.3.7'
 
 #### 4、添加混淆（若关闭混淆，此步跳过）
 
-> 温馨提示：如果开启混淆，请添加如下混淆，若关闭混淆，此步跳过。
+> 温馨提示：如果开启混淆`minifyEnabled true`，请添加如下混淆；若关闭混淆`minifyEnabled false`，此步跳过。
 
 ```properties
 -keep class com.seal.office.aar.** {
