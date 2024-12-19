@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         JSONObject params = new JSONObject();
         params.put("waterMarkText", "你好，世界\n准备好了吗？时刻准备着");
         // 指定跳转页码
-        params.put("targetPage", 5);
+//        params.put("targetPage", 5);
         params.put("menuItems", new JSONArray() {{
             add("下载");
             add("分享");
@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
                 params.put("url", getFilesDir().getAbsolutePath() + File.separator + "test.docx");
                 params.put("isDeleteFile", false);
                 // 指定跳转页码
-                params.put("targetPage", 5);
+//                params.put("targetPage", 5);
                 params.put("menuItems", new JSONArray() {{
                     add("下载");
                     add("分享");
@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
                 params.put("url", getFilesDir().getAbsolutePath() + File.separator + "test.docx");
                 params.put("isDeleteFile", false);
                 // 指定跳转页码
-                params.put("targetPage", 5);
+//                params.put("targetPage", 5);
                 params.put("menuItems", new JSONArray() {{
                     add("下载");
                     add("分享");
@@ -323,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
                 params.put("waterMarkText", "您好\n这是一个在线docx");
                 params.put("url", "http://silianpan.cn/upload/2022/01/01/1.docx");
                 // 指定跳转页码
-                params.put("targetPage", 5);
+//                params.put("targetPage", 5);
                 params.put("menuItems", new JSONArray() {{
                     add("下载");
                     add("分享");
