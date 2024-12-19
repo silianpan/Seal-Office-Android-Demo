@@ -1,5 +1,6 @@
 package com.seal.office.demo;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -44,7 +45,7 @@ public class CustomActivity extends AppCompatActivity {
 
         SealOfficeEngineApi.openFile(CustomActivity.this, customFrameLayout, params, new ISealReaderCallback() {
             @Override
-            public void callback(int code, String msg) {
+            public void callback(Context context, int code, String msg, JSONObject jsonObject) {
                 Log.e("打开文件URL：" + code, msg);
                 if (code == 1010) {
                     // 页面返回，删除布局，避免重复添加
@@ -53,7 +54,7 @@ public class CustomActivity extends AppCompatActivity {
             }
 
             @Override
-            public void menuClick(JSONObject jsonObject) {
+            public void menuClick(Context context, JSONObject jsonObject) {
                 Toast.makeText(CustomActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
             }
         });
