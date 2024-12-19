@@ -71,17 +71,32 @@ implementation 'xyz.doikki.android.dkplayer:dkplayer-ui:3.3.7'
 // ============ 音视频播放，不需要直接去掉 end ============
 ```
 
-#### 4、插件初始化（在应用启动时进行调用）
+#### 4、添加混淆（若关闭混淆，此步跳过）
 
-#### 4.1 传递授权文件路径
+> 温馨提示：如果开启混淆，请添加如下混淆，若关闭混淆，此步跳过。
 
-如授权文件在`assets/product/seal-office.license`目录下，请传递`product/seal-office.license`，如下：
+```properties
+-keep class com.seal.office.aar.** {
+    *;
+}
+-keep class com.tencent.mtt.external.reader.** {
+    *;
+}
+```
+
+
+
+#### 5、插件初始化（在应用启动时进行调用）
+
+#### 5.1 传递授权文件路径（若授权文件在：src/main/asserts目录下，此步跳过）
+
+如授权文件在`src/main/assets/product/seal-office.license`目录下，请传递`product/seal-office.license`，如下：
 
 ```java
 SealOfficeEngineApi.initLicenseFile("product/seal-office.license");
 ```
 
-#### 4.2 初始化
+#### 5.2 初始化
 
 ```java
 SealOfficeEngineApi.initEngine(MainActivity.this, new ISealReaderCallback() {
@@ -92,7 +107,7 @@ SealOfficeEngineApi.initEngine(MainActivity.this, new ISealReaderCallback() {
 });
 ```
 
-#### 5、接口调用
+#### 6、接口调用
 
 #### 注意：接口参数请参考：[五、openFile接口参数说明](https://github.com/silianpan/Seal-UniPlugin-Demo)
 
