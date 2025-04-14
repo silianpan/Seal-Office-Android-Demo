@@ -43,9 +43,7 @@ UniApp项目集成方式，参考：[插件市场](https://ext.dcloud.net.cn/plu
 
 * 创建src/main/assets/seal-office.license文件，并添加授权码
 
-* 扫下面二维码添加WX，联系客服获取授权码；或者添加QQ号（2480621579）
-
-<img src="http://silianpan.cn/upload/2022/01/01/Seal-UniPlugin-WeiXin-Me.jpg" width="240" style="width:240px;" />
+* 添加QQ号（2480621579）获取授权码
 
 #### 3、添加依赖
 
