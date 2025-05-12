@@ -95,13 +95,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         copyAssetsFileToAppFiles("file" + File.separator + "test.docx", "test.docx");
+        copyAssetsFileToAppFiles("file" + File.separator + "test.xlsx", "test.xlsx");
+        copyAssetsFileToAppFiles("file" + File.separator + "test.ofd", "test.ofd");
+        copyAssetsFileToAppFiles("file" + File.separator + "test2.ofd", "test2.ofd");
+
         SealOfficeEngineApi.initLicenseFile("product/seal-office.license");
 
         // 插件初始化
@@ -117,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        Utils.init(this.getApplication());
+//        SealOfdReaderApi.initEngine(MainActivity.this);
+
         // 获取版本号
         String versionCode = SealOfficeEngineApi.getVersion(MainActivity.this);
         Log.d("SealOffice版本号：", versionCode);
@@ -124,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         // 参数传递
         JSONObject params = new JSONObject();
         params.put("waterMarkText", "你好，世界\n准备好了吗？时刻准备着");
+        params.put("isDeleteFile", false);
         // 指定跳转页码
 //        params.put("targetPage", 5);
         params.put("menuItems", new JSONArray() {{
@@ -157,7 +164,11 @@ public class MainActivity extends AppCompatActivity {
                             int pageCount = jsonObject.getIntValue("pageCount");
                             mCurPage = curPage;
                             mPageCount = pageCount;
+                            PrefUtils.saveCurrentPage(context, mCurPage);
                             Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+                        } else if (code == 2) {
+                            int currentPage = PrefUtils.getCurrentPage(context);
+                            SealOfficeEngineApi.gotoPage(currentPage);
                         }
                     }
 
@@ -264,9 +275,14 @@ public class MainActivity extends AppCompatActivity {
                             int pageCount = jsonObject.getIntValue("pageCount");
                             mCurPage = curPage;
                             mPageCount = pageCount;
+                            PrefUtils.saveCurrentPage(context, mCurPage);
                             Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+                        } else if (code == 2) {
+                            int currentPage = PrefUtils.getCurrentPage(context);
+                            SealOfficeEngineApi.gotoPage(currentPage);
                         }
                     }
+
                     @Override
                     public void menuClick(Context context, JSONObject jsonObject) {
                         Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
@@ -275,6 +291,66 @@ public class MainActivity extends AppCompatActivity {
 
                 // 显示对话框
                 dialog.show();
+            }
+        });
+
+        // 本地ofd
+        findViewById(R.id.open_local_ofd_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONObject params = new JSONObject();
+                params.put("waterMarkText", "您好\n这是一个本地docx");
+                params.put("url", getFilesDir().getAbsolutePath() + File.separator + "test.ofd");
+                params.put("isDeleteFile", false);
+                params.put("fileType", "odf");
+                // 指定跳转页码
+//                params.put("targetPage", 5);
+                params.put("menuItems", new JSONArray() {{
+                    add("下载");
+                    add("分享");
+                    add("跳转页码");
+                }});
+
+                // 第一种预览方式
+                SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
+                    @Override
+                    public void callback(Context context, int code, String msg, JSONObject jsonObject) {
+                        Log.e(TAG, "打开本地ofd：" + code + ", " + msg);
+                        if (code == 1011) {
+                            int curPage = jsonObject.getIntValue("curPage");
+                            int pageCount = jsonObject.getIntValue("pageCount");
+                            mCurPage = curPage;
+                            mPageCount = pageCount;
+                            Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+                        }
+                    }
+
+                    @Override
+                    public void menuClick(Context context, JSONObject jsonObject) {
+                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+                        gotoPage(context);
+                    }
+                });
+
+                // 第二种预览方式
+//                SealOfdReaderApi.openFileOfd(MainActivity.this, params, new com.seal.ofd.reader.api.ISealReaderCallback() {
+//                    @Override
+//                    public void callback(Context context, int code, String msg, JSONObject jsonObject) {
+//                        Log.e(TAG, "打开本地ofd：" + code + ", " + msg);
+//                        if (code == 1011) {
+//                            int curPage = jsonObject.getIntValue("curPage");
+//                            int pageCount = jsonObject.getIntValue("pageCount");
+//                            mCurPage = curPage;
+//                            mPageCount = pageCount;
+//                            Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void menuClick(Context context, JSONObject jsonObject) {
+//                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
+//                    }
+//                });
             }
         });
 
@@ -302,7 +378,11 @@ public class MainActivity extends AppCompatActivity {
                             int pageCount = jsonObject.getIntValue("pageCount");
                             mCurPage = curPage;
                             mPageCount = pageCount;
+                            PrefUtils.saveCurrentPage(context, mCurPage);
                             Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+                        } else if (code == 2) {
+                            int currentPage = PrefUtils.getCurrentPage(context);
+                            SealOfficeEngineApi.gotoPage(currentPage);
                         }
                     }
 
@@ -310,6 +390,33 @@ public class MainActivity extends AppCompatActivity {
                     public void menuClick(Context context, JSONObject jsonObject) {
                         Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
                         gotoPage(context);
+                    }
+                });
+            }
+        });
+
+        // 本地xlsx
+        findViewById(R.id.open_local_xlsx_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONObject params = new JSONObject();
+                params.put("waterMarkText", "您好\n这是一个本地xlsx");
+                params.put("url", getFilesDir().getAbsolutePath() + File.separator + "test.xlsx");
+                params.put("isDeleteFile", false);
+                params.put("menuItems", new JSONArray() {{
+                    add("下载");
+                    add("分享");
+                    add("跳转页码");
+                }});
+                SealOfficeEngineApi.openFile(MainActivity.this, params, new ISealReaderCallback() {
+                    @Override
+                    public void callback(Context context, int code, String msg, JSONObject jsonObject) {
+                        Log.e(TAG, "打开本地xlsx：" + code + ", " + msg);
+                    }
+
+                    @Override
+                    public void menuClick(Context context, JSONObject jsonObject) {
+                        Toast.makeText(MainActivity.this, jsonObject.toJSONString(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -338,7 +445,11 @@ public class MainActivity extends AppCompatActivity {
                             int pageCount = jsonObject.getIntValue("pageCount");
                             mCurPage = curPage;
                             mPageCount = pageCount;
+                            PrefUtils.saveCurrentPage(context, mCurPage);
                             Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+                        } else if (code == 2) {
+                            int currentPage = PrefUtils.getCurrentPage(context);
+                            SealOfficeEngineApi.gotoPage(currentPage);
                         }
                     }
 
@@ -392,7 +503,11 @@ public class MainActivity extends AppCompatActivity {
                             int pageCount = jsonObject.getIntValue("pageCount");
                             mCurPage = curPage;
                             mPageCount = pageCount;
+                            PrefUtils.saveCurrentPage(context, mCurPage);
                             Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+                        } else if (code == 2) {
+                            int currentPage = PrefUtils.getCurrentPage(context);
+                            SealOfficeEngineApi.gotoPage(currentPage);
                         }
                     }
 
@@ -421,7 +536,11 @@ public class MainActivity extends AppCompatActivity {
                             int pageCount = jsonObject.getIntValue("pageCount");
                             mCurPage = curPage;
                             mPageCount = pageCount;
+                            PrefUtils.saveCurrentPage(context, mCurPage);
                             Log.e(TAG, "当前页码/总页码：" + curPage + "/" + pageCount);
+                        } else if (code == 2) {
+                            int currentPage = PrefUtils.getCurrentPage(context);
+                            SealOfficeEngineApi.gotoPage(currentPage);
                         }
                     }
 
