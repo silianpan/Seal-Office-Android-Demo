@@ -1,6 +1,7 @@
 package com.seal.office.demo;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -13,9 +14,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.seal.office.aar.api.ISealReaderCallback;
 import com.seal.office.aar.api.SealOfficeEngineApi;
 
-import java.io.File;
-
 public class CustomActivity extends AppCompatActivity {
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // 横竖屏切换阅读视图宽高自适应
+        SealOfficeEngineApi.setReadWidthHeight(CustomActivity.this, null, null);
+//        SealOfficeEngineApi.setReadWidthHeight(CustomActivity.this, 800, 640);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,8 +30,11 @@ public class CustomActivity extends AppCompatActivity {
 
         JSONObject params = new JSONObject();
         params.put("waterMarkText", "您好\n这是一个本地docx");
-        params.put("url", getFilesDir().getAbsolutePath() + File.separator + "test.docx");
+//        params.put("url", getFilesDir().getAbsolutePath() + File.separator + "test.docx");
+        params.put("url", "http://silianpan.cn/upload/2022/01/01/1.docx");
         params.put("isDeleteFile", false);
+        params.put("readViewWidth", 640);
+        params.put("readViewHeight", 1200);
         params.put("menuItems", new JSONArray() {{
             add("下载");
             add("分享");

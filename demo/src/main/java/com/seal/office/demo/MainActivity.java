@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         JSONObject params = new JSONObject();
         params.put("waterMarkText", "你好，世界\n准备好了吗？时刻准备着");
         params.put("isDeleteFile", false);
+//        params.put("topBarHeight", 160);
         // 指定跳转页码
 //        params.put("targetPage", 5);
         params.put("menuItems", new JSONArray() {{
